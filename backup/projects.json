@@ -1,0 +1,54 @@
+[
+    {
+        "id": "chimborazo",
+        "slug": "chimborazo",
+        "title": "Chimborazo Native Food Project",
+        "tagline": "A native food forest at Chimborazo Park, Church Hill, Richmond",
+        "description": "The Chimborazo Native Food Project, founded in 2020, was established to provide an accessible community orchard of native fruit trees and shrubs and introduce the importance of native plant communities to residents of Richmond's East End. In the spring of 2021, with permission from the City of Richmond's Department of Parks, Recreation, and Community Development, volunteers began work removing a large infestation of non-native kudzu (Pueraria montana) on an acre of land at the southern corner of Chimborazo Park, the designated plot for the orchard. Removing this tangle of dense, leafy vine opened up much of the area to a native grassland habitat and provided tillable soil to begin planting for the orchard.\n\nWork removing the invasive kudzu continued in the first half of 2022, and was successful enough for volunteers to plant 55 native fruit trees and shrubs, including 16 American hazelnut shrubs, seven Chickasaw plum trees, five downy serviceberry trees, and 27 black chokeberry shrubs. The success of volunteers' kudzu management allowed for seeds for myriad native species, long dormant under the heavy mat of kudzu vines, to germinate, and the orchard saw a profusion of deer tongue grass, passion fruit vines, common evening primrose, and elderberry shrubs.\n\nIn Fall 2022, Chimborazo Native Food Project will expand the orchard with more plantings, including Canada serviceberry, Chickasaw plum, and American persimmon trees, as well as expanding our native grape production operation, which will include Concord grapevines. Volunteers will also focus on the complete removal of kudzu from adjacent sites, and work to bring more native grass and forb diversity to our grassland habitat, to further sustain native pollinators and indigenous insect and avian populations.\n\nParamount in our core values is access: Chimborazo Native Food Project provides an avenue to native foods and exposure to farming techniques for all Richmond residents by eliminating any fiscal barriers that could hamper participation. While many community gardens require fees to reserve and tend a plot, our community orchard operates without a paywall for membership, allowing residents the opportunity to participate sans economic constraints. When fully operational, the community orchard will be open to all park visitors, with produce free to those who choose to harvest here. Through this, we strive not only to provide access to healthy food, but also to inform the community about foods native to Virginia and demonstrate how a food-production system based on native ecosystems can lead to a more resilient society while simultaneously promoting biodiversity in urban and suburban settings.",
+        "hero_images": [],
+        "organizers": [
+            {
+                "role": "",
+                "user_id": "8f8b3e18-e020-4f60-a479-f7d25ad7a238"
+            },
+            {
+                "role": "",
+                "user_id": "be967072-bfb8-4844-8e4c-8846ea6b31f8"
+            },
+            {
+                "role": "",
+                "user_id": "df6068fa-1178-48fa-9a4b-854545287b03"
+            }
+        ],
+        "created_at": "2026-09-19T18:20:36.308201+00:00",
+        "updated_at": "2026-09-19T20:37:50.238709+00:00",
+        "calendar_ics_url": "https://calendar.google.com/calendar/ical/c_0b2927ae158f2ce24bff3b88fde908fb20eb9a94c9b02811c7304d2c71354426%40group.calendar.google.com/public/basic.ics",
+        "calendar_html_url": "https://calendar.google.com/calendar/embed?src=c_0b2927ae158f2ce24bff3b88fde908fb20eb9a94c9b02811c7304d2c71354426%40group.calendar.google.com&ctz=America%2FNew_York",
+        "instagram_handle": "",
+        "instagram_posts": [],
+        "website_url": "https://verdantrichmond.org/chimborazo-native-food-project/",
+        "donate_url": "https://verdantrichmond.org/chimborazo-native-food-project/"
+    },
+    {
+        "id": "chimborazo-community-garden",
+        "slug": "chimborazo-community-garden",
+        "title": "Chimborazo Community Garden",
+        "tagline": "A community garden at Chimborazo Park, Church Hill, Richmond",
+        "description": "",
+        "hero_images": [],
+        "organizers": [
+            {
+                "name": "Erika Stanley",
+                "role": ""
+            }
+        ],
+        "created_at": "2026-09-19T20:41:20.521819+00:00",
+        "updated_at": "2026-09-19T20:41:39.536392+00:00",
+        "calendar_ics_url": "",
+        "calendar_html_url": "",
+        "instagram_handle": "",
+        "instagram_posts": [],
+        "website_url": "",
+        "donate_url": ""
+    }
+]
