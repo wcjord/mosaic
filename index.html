@@ -698,7 +698,7 @@ async function fetchAll(tries=0){
     sb.from('overlays').select('*').order('created_at'),
     sb.from('projects').select('*').eq('slug',projectSlug).maybeSingle(),
     sb.from('events').select('*').eq('project_id',projectSlug).order('starts_at'),
-    sb.from('profiles').select('id,display_name,avatar_url,email')
+    sb.from('profiles').select('id,display_name,avatar_url')
   ]);
   if(!p.error&&p.data)PROJECT=p.data;
   if(!e.error&&e.data)EVENTS=e.data;
@@ -1339,7 +1339,7 @@ function renderEvents(){
 }
 function organizerInfo(o){
   const p=o.user_id?PROFILES[o.user_id]:null;
-  return {name:(p&&p.display_name)||o.name||(p&&p.email)||'Unnamed',
+  return {name:(p&&p.display_name)||o.name||'Unnamed',
           avatar:(p&&p.avatar_url)||o.avatar||'',
           role:o.role||''};
 }
@@ -1505,8 +1505,10 @@ async function loadMe(){
   if(!session){ME=null;MY_RSVPS={};MY_SUB=false;
     const ms=document.getElementById('meSec');if(ms)ms.hidden=true;
     renderAccount();renderSubscribeBtn();renderEvents();return}
-  const {data}=await sb.from('profiles').select('*').eq('id',session.user.id).maybeSingle();
-  ME=data||{id:session.user.id,email:session.user.email,display_name:'',avatar_url:''};
+  const {data}=await sb.from('profiles').select('id,display_name,avatar_url')
+    .eq('id',session.user.id).maybeSingle();
+  ME={id:session.user.id,email:session.user.email,
+      display_name:(data&&data.display_name)||'',avatar_url:(data&&data.avatar_url)||''};
   PROFILES[ME.id]=ME;
   await loadMyRsvps();await loadMySubscription();
   renderAccount();renderSubscribeBtn();renderEvents();
@@ -1832,7 +1834,7 @@ function renderProjEditor(){
   for(const p of Object.values(PROFILES)){
     if(taken.has(p.id))continue;
     const o=document.createElement('option');o.value=p.id;
-    o.textContent=p.display_name||p.email||p.id.slice(0,8);
+    o.textContent=p.display_name||('Account '+p.id.slice(0,8));
     who.appendChild(o);
   }
   const orgs=document.getElementById('prOrgs');orgs.innerHTML='';
