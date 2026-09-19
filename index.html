@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chimborazo Native Food Project — Site Map</title>
+<title>Mosaic</title>
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -2131,6 +2131,7 @@ function worldBounds(){
 }
 function enterWorld(){
   WORLD=true;projectSlug='';
+  document.title='Mosaic';
   if(location.hash)history.replaceState(null,'',location.pathname+location.search);
   document.getElementById('panel').hidden=true;
   document.getElementById('statusChips').hidden=true;
@@ -2158,6 +2159,7 @@ async function openProject(slug){
   site.forEach(l=>{if(map.getLayer(l))map.setLayoutProperty(l,'visibility','visible')});
   showView('page');
   await fetchAll();
+  document.title=(PROJECT&&PROJECT.title)?`${PROJECT.title} — Mosaic`:'Mosaic';
   const ring=projectShape();
   if(ring){const xs=ring[0].map(p=>p[0]),ys=ring[0].map(p=>p[1]);
     map.fitBounds([[Math.min(...xs),Math.min(...ys)],[Math.max(...xs),Math.max(...ys)]],
