@@ -198,6 +198,17 @@
   header h1{font-size:15px;margin:0;font-weight:600;letter-spacing:.02em}
   header .sub{font-size:11px;color:var(--dim);margin-top:3px}
   section{padding:12px 16px;border-bottom:1px solid var(--line)}
+  .acc{border-bottom:1px solid var(--line)}
+  .acc>summary{list-style:none;cursor:pointer;padding:12px 16px;font-size:11px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.1em;color:var(--dim);display:flex;align-items:center;gap:7px}
+  .acc>summary::-webkit-details-marker{display:none}
+  .acc>summary::before{content:'';width:0;height:0;flex:none;
+    border-left:5px solid var(--dim);border-top:4px solid transparent;border-bottom:4px solid transparent;
+    transition:transform .15s}
+  .acc[open]>summary::before{transform:rotate(90deg)}
+  .acc>summary:hover{color:var(--ink);background:var(--panel2)}
+  .accN{margin-left:auto;font-size:10px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--dim)}
+  .accBody{padding:0 16px 14px}
   h2{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin:0 0 8px;font-weight:600}
   .palette{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
   .tool{background:var(--panel2);border:1px solid var(--line);border-radius:8px;color:var(--ink);
@@ -249,11 +260,11 @@
   #edHeroEmpty{color:#9c9281;font-size:11px;text-align:center;padding:0 24px;line-height:1.6}
   #edCount{position:absolute;right:8px;bottom:8px;background:rgba(28,26,23,.72);color:#f2ede4;
     font-size:10px;border-radius:10px;padding:2px 8px;pointer-events:none}
-  #projSec select{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:6px;font-size:12px;font-family:inherit;margin-bottom:6px}
-  #meSec input[type=text],#projSec input[type=text],#projSec textarea,#projSec input[type=datetime-local]{
+  #side select{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:6px;font-size:12px;font-family:inherit;margin-bottom:6px}
+  #side input[type=text],#projSec textarea,#projSec input[type=datetime-local]{
     width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--ink);
     border-radius:6px;padding:6px;font-size:12px;font-family:inherit;margin-bottom:6px}
-  #projSec textarea{resize:vertical;min-height:52px}
+  #side textarea{resize:vertical;min-height:52px}
   .subH{font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin:11px 0 5px}
   .miniRow{display:flex;gap:5px}
   .rowItem{display:flex;align-items:center;gap:7px;font-size:11.5px;padding:3px 0;color:var(--dim)}
@@ -362,118 +373,115 @@
 </div>
 <div id="side">
   <header>
-    <h1>Chimborazo Native Food Project</h1>
-    <div class="sub"><span id="syncDot"></span><span id="syncLabel">shared site map</span></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="small" id="backToPage">← Project page</button>
+      <span class="sub" style="margin:0"><span id="syncDot"></span><span id="syncLabel">shared</span></span>
+    </div>
+    <h1 style="margin-top:9px">Editing <span id="edProjName"></span></h1>
   </header>
 
-  <section id="authBox">
-    <h2>Stewards</h2>
-    <div id="authOut">
-      <input type="email" id="authEmail" placeholder="you@example.com">
-      <div style="display:flex;gap:6px;margin-top:7px;align-items:center">
-        <button class="small" id="btnMagic">Email me a sign-in link</button>
+  <details class="acc" id="accDetails">
+    <summary>Project details</summary>
+    <div class="accBody">
+      <input type="text" id="prTitle" placeholder="Project title">
+      <input type="text" id="prTagline" placeholder="One-line tagline">
+      <textarea id="prAbout" placeholder="Description shown on the project page"></textarea>
+      <div class="subH">Cover pictures</div>
+      <div class="imgs" id="prHero"></div>
+      <button class="small" id="prAddHero">+ Add cover picture</button>
+      <input type="file" id="prHeroFile" accept="image/*" style="display:none">
+    </div>
+  </details>
+
+  <details class="acc" id="accLinks">
+    <summary>Links &amp; social</summary>
+    <div class="accBody">
+      <div class="subH">Links</div>
+      <input type="text" id="prWeb" placeholder="Project website URL">
+      <input type="text" id="prDonate" placeholder="Donate URL — used by the Donate button">
+      <div class="subH">Instagram</div>
+      <input type="text" id="prIg" placeholder="@handle">
+      <div id="prIgPosts"></div>
+      <div class="miniRow"><input type="text" id="prIgUrl" placeholder="Paste a post URL to pin"></div>
+      <button class="small" id="prAddIg">+ Pin post</button>
+    </div>
+  </details>
+
+  <details class="acc" id="accPeople">
+    <summary>Organizers</summary>
+    <div class="accBody">
+      <div id="prOrgs"></div>
+      <div class="miniRow">
+        <select id="prOrgWho"></select>
+        <input type="text" id="prOrgRole" placeholder="Role">
       </div>
-      <div class="hint">Anyone can view. Stewards sign in to edit — no password, just a link in your email.</div>
+      <div class="miniRow"><input type="text" id="prOrgName" placeholder="…or a name, for someone with no account"></div>
+      <button class="small" id="prAddOrg">+ Add organizer</button>
     </div>
-    <div id="authIn" style="display:none">
-      <div class="row" style="justify-content:space-between">
-        <span style="font-size:12px" id="authWho"></span>
-        <span class="pill" id="authRole">steward</span>
+  </details>
+
+  <details class="acc" id="accCalendar">
+    <summary>Calendar &amp; events</summary>
+    <div class="accBody">
+      <div class="subH">Calendar feed</div>
+      <input type="text" id="prIcs" placeholder="Public iCal (.ics) URL — Google, Apple, Outlook…">
+      <input type="text" id="prCalHtml" placeholder="Calendar web page URL (optional)">
+      <div class="hint">In Google Calendar: Settings → your calendar → Integrate calendar → Public address in iCal format.</div>
+      <div class="subH">Events</div>
+      <div id="prEvents"></div>
+      <div class="miniRow"><input type="text" id="prEvTitle" placeholder="Event title"></div>
+      <div class="miniRow"><input type="datetime-local" id="prEvWhen"><input type="text" id="prEvPlace" placeholder="Where"></div>
+      <button class="small" id="prAddEv">+ Add event</button>
+    </div>
+  </details>
+
+  <details class="acc" id="accPeopleComing">
+    <summary>Signups <span class="accN" id="nRsvps"></span></summary>
+    <div class="accBody">
+      <div class="subH">Going to an event</div>
+      <div id="prRsvps"></div>
+      <div class="subH">Email list</div>
+      <div id="prSubs"></div>
+      <button class="small" id="prCopySubs">Copy addresses</button>
+      <div class="hint">Only organizers can see these. They are never public.</div>
+    </div>
+  </details>
+
+  <details class="acc" id="accMap" open>
+    <summary>Map features <span class="accN" id="nFeats"></span></summary>
+    <div class="accBody">
+      <div class="subH">Add to the map</div>
+      <div class="palette" id="palette"></div>
+      <div class="hint" id="hint">Pick a tool, then click the map. Click any feature to edit it.</div>
+      <div id="drawActions">
+        <button class="small" id="btnFinish" style="border-color:var(--accent);color:var(--accent)">✓ Finish shape</button>
+        <button class="small" id="btnCancel">Cancel</button>
       </div>
-      <button class="small" id="btnSignOut">Sign out</button>
+      <div id="presetSection" style="display:none">
+        <div class="subH" id="presetHead">Place another</div>
+        <div id="presetList"></div>
+        <div class="hint" id="presetTip">Click one to place more of the same, with its name and notes copied.</div>
+      </div>
+      <div class="subH">Layers</div>
+      <div class="row"><input type="checkbox" id="lyrParcels" checked><label for="lyrParcels">Parcel lines (city GIS)</label></div>
+      <div class="row"><input type="checkbox" id="lyrPark" checked><label for="lyrPark">Park boundary (city GIS)</label></div>
+      <div class="row"><input type="checkbox" id="lyrLabels" checked><label for="lyrLabels">Feature labels</label></div>
+      <div id="ovlWrap" style="display:none">
+        <div class="subH">Imagery overlays</div>
+        <div id="ovlList"></div>
+        <button class="small" id="btnUpload">+ Upload image overlay</button>
+        <input type="file" id="fileInput" accept="image/*" style="display:none">
+      </div>
+      <div class="subH">On the map <span id="taskCount" class="taskbadge" style="display:none"></span></div>
+      <div id="featList"></div>
+      <div style="margin-top:10px;display:none">
+        <button class="small" id="btnExport">Export GeoJSON</button>
+        <button class="small" id="btnRefresh">Refresh</button>
+      </div>
     </div>
-  </section>
+  </details>
 
-  <section id="meSec" hidden>
-    <h2>Your profile</h2>
-    <div class="rowItem" id="meRow"></div>
-    <input type="text" id="meName" placeholder="Your name, as shown to visitors">
-    <button class="small" id="meAvatar">Upload your photo</button>
-    <input type="file" id="meAvatarFile" accept="image/*" style="display:none">
-    <div class="hint">Only you can change this. It follows you to every project you organize.</div>
-  </section>
-
-  <section id="projSec">
-    <h2>Project page</h2>
-    <input type="text" id="prTitle" placeholder="Project title">
-    <input type="text" id="prTagline" placeholder="One-line tagline">
-    <textarea id="prAbout" placeholder="Description shown on the project page"></textarea>
-    <div class="subH">Cover pictures</div>
-    <div class="imgs" id="prHero"></div>
-    <button class="small" id="prAddHero">+ Add cover picture</button>
-    <input type="file" id="prHeroFile" accept="image/*" style="display:none">
-    <div class="subH">Organizers</div>
-    <div id="prOrgs"></div>
-    <div class="miniRow">
-      <select id="prOrgWho"></select>
-      <input type="text" id="prOrgRole" placeholder="Role">
-    </div>
-    <div class="miniRow"><input type="text" id="prOrgName" placeholder="…or a name, for someone with no account"></div>
-    <button class="small" id="prAddOrg">+ Add organizer</button>
-    <div class="subH">Links</div>
-    <input type="text" id="prWeb" placeholder="Project website URL">
-    <input type="text" id="prDonate" placeholder="Donate URL">
-    <div class="subH">Calendar feed</div>
-    <input type="text" id="prIcs" placeholder="Public iCal (.ics) URL — Google, Apple, Outlook…">
-    <input type="text" id="prCalHtml" placeholder="Calendar web page URL (optional)">
-    <div class="hint">In Google Calendar: Settings → your calendar → Integrate calendar → Public address in iCal format.</div>
-    <div class="subH">Instagram</div>
-    <input type="text" id="prIg" placeholder="@handle">
-    <div id="prIgPosts"></div>
-    <div class="miniRow"><input type="text" id="prIgUrl" placeholder="Paste a post URL to pin"></div>
-    <button class="small" id="prAddIg">+ Pin post</button>
-    <div class="subH">Who is coming</div>
-    <div id="prRsvps"></div>
-    <div class="subH">Events</div>
-    <div id="prEvents"></div>
-    <div class="miniRow"><input type="text" id="prEvTitle" placeholder="Event title"></div>
-    <div class="miniRow"><input type="datetime-local" id="prEvWhen"><input type="text" id="prEvPlace" placeholder="Where"></div>
-    <button class="small" id="prAddEv">+ Add event</button>
-  </section>
-
-  <section>
-    <h2>Add to the map</h2>
-    <div class="palette" id="palette"></div>
-    <div class="hint" id="hint">Pick a tool, then click the map. Click any feature to edit it.</div>
-    <div id="drawActions">
-      <button class="small" id="btnFinish" style="border-color:var(--accent);color:var(--accent)">✓ Finish shape</button>
-      <button class="small" id="btnCancel">Cancel</button>
-    </div>
-  </section>
-
-  <section id="presetSection" style="display:none">
-    <h2 id="presetHead">Place another</h2>
-    <div id="presetList"></div>
-    <div class="hint" id="presetTip">Click one to place more of the same, with its name and notes copied.</div>
-  </section>
-
-  <section>
-    <h2>Layers</h2>
-    <div class="row"><input type="checkbox" id="lyrParcels" checked><label for="lyrParcels">Parcel lines (city GIS)</label></div>
-    <div class="row"><input type="checkbox" id="lyrPark" checked><label for="lyrPark">Park boundary (city GIS)</label></div>
-    <div class="row"><input type="checkbox" id="lyrLabels" checked><label for="lyrLabels">Feature labels</label></div>
-  </section>
-
-  <section style="display:none">
-    <h2>Imagery overlays</h2>
-    <div id="ovlList"></div>
-    <button class="small" id="btnUpload">+ Upload image overlay</button>
-    <input type="file" id="fileInput" accept="image/*" style="display:none">
-    <div class="hint">Drone photo, drawn plan, AI sketch — drop it on the park, then drag to move; sliders size, rotate and fade it.</div>
-  </section>
-
-  <section>
-    <h2>Features <span id="taskCount" class="taskbadge" style="display:none"></span></h2>
-    <div id="featList"></div>
-  </section>
-
-  <section style="display:none">
-    <h2>Data</h2>
-    <button class="small" id="btnExport">Export GeoJSON</button>
-    <button class="small" id="btnRefresh">Refresh</button>
-  </section>
-
-  <footer><button class="small" id="backToPage" style="margin-bottom:9px">← Back to project page</button><br>Basemap © Esri World Imagery · Parcels &amp; park boundary © City of Richmond GIS · Shared map — edits by signed-in stewards are visible to everyone.</footer>
+  <footer>Basemap © Esri World Imagery · Parcels &amp; park boundary © City of Richmond GIS · Shared map — edits by signed-in stewards are visible to everyone.</footer>
 </div>
 </div>
 <div id="map"></div>
@@ -725,7 +733,7 @@ async function fetchAll(tries=0){
       if(map.getLayer('ovl-'+id)){map.removeLayer('ovl-'+id);map.removeSource('ovl-'+id)}});
     overlays.forEach(updateOverlay);
   }
-  refresh();renderOvlList();renderPage();renderProjEditor();
+  refresh();renderOvlList();renderPage();renderProjEditor();renderRsvpAdmin();
   sync(true,'shared site map — up to date');
 }
 async function dbUpsertFeature(f){
@@ -743,34 +751,20 @@ function debounceUpsert(f){clearTimeout(debounces[f.id]);debounces[f.id]=setTime
 // ---------- auth ----------
 async function refreshAuth(){
   const {data:{session}}=await sb.auth.getSession();
-  const out=document.getElementById('authOut'),inn=document.getElementById('authIn');
-  if(!session){canEdit=false;out.style.display='block';inn.style.display='none'}
-  else{
-    out.style.display='none';inn.style.display='block';
-    document.getElementById('authWho').textContent=session.user.email;
+  canEdit=false;
+  if(session){
     const {data:st}=await sb.rpc('is_steward');
     canEdit=!!st;
-    const role=document.getElementById('authRole');
-    role.textContent=canEdit?'steward':'view only';
-    role.className='pill'+(canEdit?'':' ro');
-    if(canEdit)maybeMigrateLocal();
   }
   document.querySelectorAll('.tool').forEach(b=>b.disabled=!canEdit);
-  const ps=document.getElementById('projSec');if(ps)ps.hidden=!canEdit;
+  const ae=document.getElementById('actEdit');if(ae)ae.hidden=!canEdit;
   const mo=document.getElementById('pgMore');if(mo)mo.hidden=!canEdit;
   if(!canEdit){stampTpl=null;stampCount=0}
-  renderPresets();
-  document.getElementById('btnUpload').disabled=!canEdit;
-  if(!canEdit)hint('Viewing the shared map. Sign in as a steward to add or edit.');
-  else hint('Pick a tool, then click the map. Click any feature to edit it.');
+  renderPresets();renderImages();
+  if(!canEdit&&!WORLD)showView('page');
+  hint(canEdit?'Pick a tool, then click the map. Click any feature to edit it.'
+              :'Sign in as a steward to add or edit.');
 }
-document.getElementById('btnMagic').onclick=async()=>{
-  const email=document.getElementById('authEmail').value.trim();
-  if(!email)return;
-  const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+location.pathname}});
-  hint(error?('Could not send link: '+error.message):'Link sent — check your email on this device.');
-};
-document.getElementById('btnSignOut').onclick=async()=>{await sb.auth.signOut();refreshAuth()};
 sb.auth.onAuthStateChange(()=>{refreshAuth();loadMe()});
 
 // one-time migration of pre-database local drawings
@@ -1506,7 +1500,6 @@ document.getElementById('actDirections').onclick=()=>{
 async function loadMe(){
   const {data:{session}}=await sb.auth.getSession();
   if(!session){ME=null;MY_RSVPS={};MY_SUB=false;
-    const ms=document.getElementById('meSec');if(ms)ms.hidden=true;
     renderAccount();renderSubscribeBtn();renderEvents();return}
   const {data}=await sb.from('profiles').select('id,display_name,avatar_url')
     .eq('id',session.user.id).maybeSingle();
@@ -1521,11 +1514,6 @@ async function loadMe(){
     if(p.type==='rsvp'&&p.event)await doRsvp(p.event);
     if(p.type==='subscribe'&&!MY_SUB)await toggleSubscribe();
   }
-  document.getElementById('meSec').hidden=false;
-  document.getElementById('meName').value=ME.display_name||'';
-  const row=document.getElementById('meRow');
-  row.innerHTML=(ME.avatar_url?`<img src="${ME.avatar_url}" alt="">`:'')+
-    `<span>${esc(ME.email||'')}</span>`;
 }
 async function saveMe(patch){
   if(!ME)return;
@@ -1537,17 +1525,6 @@ async function saveMe(patch){
   renderPage();loadMe();
 }
 let meDeb;
-document.getElementById('meName').addEventListener('input',e=>{
-  clearTimeout(meDeb);const v=e.target.value;
-  meDeb=setTimeout(()=>saveMe({display_name:v}),700);
-});
-document.getElementById('meAvatar').onclick=()=>document.getElementById('meAvatarFile').click();
-document.getElementById('meAvatarFile').addEventListener('change',async e=>{
-  const f=e.target.files[0];e.target.value='';if(!f)return;
-  sync(true,'uploading your photo…');
-  const up=await uploadTo('avatars',f);if(!up)return;
-  saveMe({avatar_url:up.url});
-});
 
 // ---------- live calendar feed ----------
 // the .ics is fetched through an edge function because providers serve it without CORS headers
@@ -1784,9 +1761,12 @@ async function renderRsvpAdmin(){
   if(!canEdit)return;
   const {data,error}=await sb.from('rsvps').select('*').eq('project_id',projectSlug)
     .order('starts_at',{ascending:true});
+  const badge=document.getElementById('nRsvps');
   if(error||!data||!data.length){
-    box.innerHTML='<div class="hint" style="margin:0">Nobody has signed up yet.</div>';return;
+    box.innerHTML='<div class="hint" style="margin:0">Nobody has signed up yet.</div>';
+    if(badge)badge.textContent='';return;
   }
+  if(badge)badge.textContent=`${data.reduce((n,r)=>n+1+(r.guests||0),0)} going`;
   const byEvent=new Map();
   for(const r of data){
     if(!byEvent.has(r.event_key))byEvent.set(r.event_key,[]);
@@ -1806,7 +1786,34 @@ async function renderRsvpAdmin(){
     }
   }
 }
+async function renderSubscribers(){
+  const box=document.getElementById('prSubs');if(!box)return;
+  box.innerHTML='';
+  if(!canEdit)return;
+  const {data,error}=await sb.from('subscribers').select('email,created_at')
+    .eq('project_id',projectSlug).order('created_at');
+  if(error||!data||!data.length){
+    box.innerHTML='<div class="hint" style="margin:0">Nobody has subscribed yet.</div>';
+    document.getElementById('prCopySubs').hidden=true;return;
+  }
+  document.getElementById('prCopySubs').hidden=false;
+  for(const r of data){
+    const d=document.createElement('div');d.className='rowItem';
+    d.innerHTML=`<span>${esc(r.email)}</span>`;
+    box.appendChild(d);
+  }
+  document.getElementById('prCopySubs').onclick=async()=>{
+    const list=data.map(r=>r.email).join(', ');
+    try{await navigator.clipboard.writeText(list);sync(true,'addresses copied')}
+    catch(e){prompt('Copy these addresses:',list)}
+  };
+}
 function renderProjEditor(){
+  const nm=document.getElementById('edProjName');
+  if(nm&&PROJECT)nm.textContent=PROJECT.title||'';
+  const nf=document.getElementById('nFeats');
+  if(nf)nf.textContent=data.features.length?`${data.features.length} on the map`:'';
+  renderSubscribers();
   if(!PROJECT)return;
   document.getElementById('prTitle').value=PROJECT.title||'';
   document.getElementById('prTagline').value=PROJECT.tagline||'';
@@ -1860,7 +1867,6 @@ function renderProjEditor(){
     x.onclick=()=>saveProject({organizers:(PROJECT.organizers||[]).filter((_,j)=>j!==i)});
     d.appendChild(x);orgs.appendChild(d);
   });
-  renderRsvpAdmin();
   const evs=document.getElementById('prEvents');evs.innerHTML='';
   for(const ev of FEED){
     const d=document.createElement('div');d.className='rowItem';
