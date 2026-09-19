@@ -412,9 +412,8 @@
     <div class="accBody">
 <div class="fld"><label>Calendar feed (.ics)</label><div class="why">Events from this feed appear on the page automatically. In Google Calendar: Settings → your calendar → Integrate calendar → <b>Public address in iCal format</b>.</div><input type="text" id="prIcs" placeholder="https://calendar.google.com/calendar/ical/…/public/basic.ics"></div><div class="fld"><label>Calendar page (optional)</label><div class="why">Opened by “Open the calendar in a browser” under Link Calendar.</div><input type="text" id="prCalHtml" placeholder="https://calendar.google.com/calendar/embed?src=…"></div>
       <div class="subH">Events</div>
+      <div class="why" style="margin-bottom:6px">Add, change and cancel events in Google Calendar. This page follows the feed.</div>
       <div id="prEvents"></div>
-<div class="fld"><label>Add an event by hand</label><div class="why">For anything not on the calendar feed.</div><input type="text" id="prEvTitle" placeholder="Workday: mulching the new beds"><div class="miniRow" style="margin-top:6px"><input type="datetime-local" id="prEvWhen"><input type="text" id="prEvPlace" placeholder="Where to meet"></div></div>
-      <button class="small" id="prAddEv">+ Add event</button>
     </div>
   </details>
 
@@ -1281,7 +1280,12 @@ function renderEvents(){
   if(lk)lk.hidden=!((PROJECT&&PROJECT.calendar_ics_url||'').trim());
   const now=Date.now();
   const up=allEvents().filter(e=>new Date(e.ends_at||e.starts_at).getTime()>=now).slice(0,6);
-  if(!up.length){box.innerHTML='<div class="pgEmpty">Nothing scheduled yet.</div>';return}
+  if(!up.length){
+    box.innerHTML=FEED_FAILED
+      ? '<div class="pgEmpty">The calendar could not be reached just now. Reload to try again.</div>'
+      : '<div class="pgEmpty">Nothing scheduled yet.</div>';
+    return;
+  }
   for(const ev of up){
     const d=new Date(ev.starts_at);
     const going=RSVP_COUNTS[ev.id]||0;
@@ -1489,19 +1493,31 @@ let meDeb;
 
 // ---------- live calendar feed ----------
 // the .ics is fetched through an edge function because providers serve it without CORS headers
-let FEED=[];
+let FEED=[],FEED_LOADED=false,FEED_FAILED=false;
 async function loadCalendarFeed(){
+  FEED_LOADED=false;FEED_FAILED=false;
   const ics=(PROJECT&&PROJECT.calendar_ics_url||'').trim();
-  if(!ics){FEED=[];renderEvents();return}
-  try{
-    const r=await fetch(`${SB_URL}/functions/v1/calendar-feed?url=${encodeURIComponent(ics)}`,
-      {headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
-    if(!r.ok)throw new Error('feed '+r.status);
-    const j=await r.json();
-    FEED=(j.events||[]).map(e=>({id:'cal:'+e.uid,title:e.title,starts_at:e.starts_at,
-      ends_at:e.ends_at,place:e.place,notes:e.notes,source:'calendar'}));
-  }catch(err){FEED=[];console.warn('calendar feed unavailable',err)}
+  if(!ics){FEED=[];FEED_LOADED=true;renderEvents();renderProjEditor();return}
+  // the edge function cold-starts, so one 5xx is not yet an answer about the calendar
+  for(let attempt=0;attempt<3;attempt++){
+    try{
+      const r=await fetch(`${SB_URL}/functions/v1/calendar-feed?url=${encodeURIComponent(ics)}`,
+        {headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
+      if(!r.ok)throw new Error('feed '+r.status);
+      const j=await r.json();
+      FEED=(j.events||[]).map(e=>({id:'cal:'+e.uid,title:e.title,starts_at:e.starts_at,
+        ends_at:e.ends_at,place:e.place,notes:e.notes,source:'calendar'}));
+      FEED_FAILED=false;
+      break;
+    }catch(err){
+      FEED=[];FEED_FAILED=true;
+      console.warn('calendar feed unavailable (attempt '+(attempt+1)+')',err);
+      if(attempt<2)await new Promise(r=>setTimeout(r,600*(attempt+1)));
+    }
+  }
+  FEED_LOADED=true;
   renderEvents();
+  renderProjEditor();
 }
 function allEvents(){
   const seen=new Set();
@@ -1838,6 +1854,15 @@ function renderProjEditor(){
     };
     d.appendChild(x);evs.appendChild(d);
   }
+  if(!evs.children.length){
+    const d=document.createElement('div');d.className='why';
+    d.textContent=!(PROJECT.calendar_ics_url||'').trim()
+      ? 'No calendar feed yet — paste the .ics address above.'
+      : !FEED_LOADED ? 'Reading the calendar feed…'
+      : FEED_FAILED ? 'Could not reach the calendar. Check the .ics address above, then reload.'
+      : 'Nothing upcoming on the calendar feed.';
+    evs.appendChild(d);
+  }
 }
 bindProj('prTitle','title');bindProj('prTagline','tagline');bindProj('prAbout','description');
 bindProj('prWeb','website_url');bindProj('prDonate','donate_url');
@@ -1859,17 +1884,6 @@ document.getElementById('prAddOrg').onclick=()=>{
   if(!entry)return;
   saveProject({organizers:[...(PROJECT.organizers||[]),entry]});
   who.value='';n.value='';r.value='';renderProjEditor();
-};
-document.getElementById('prAddEv').onclick=async()=>{
-  const t=document.getElementById('prEvTitle'),w=document.getElementById('prEvWhen'),
-        p=document.getElementById('prEvPlace');
-  if(!t.value.trim()||!w.value)return;
-  const row={id:uid(),project_id:projectSlug,title:t.value.trim(),
-             starts_at:new Date(w.value).toISOString(),place:p.value.trim()};
-  const {error}=await sb.from('events').insert(row);
-  if(error){sync(false,'could not save event — signed in as a steward?');return}
-  EVENTS=[...EVENTS,row].sort((a,b)=>a.starts_at.localeCompare(b.starts_at));
-  t.value='';w.value='';p.value='';renderProjEditor();renderPage();
 };
 
 // ---------- current / planned filter ----------
