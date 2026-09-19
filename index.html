@@ -115,8 +115,6 @@
   .calRow a{font-size:12px;color:var(--pg-accent);text-decoration:none;border:1px solid #dadce0;
     border-radius:16px;padding:5px 12px}
   .calRow a:hover{background:#f1f3f4}
-  .igGrid{display:grid;grid-template-columns:1fr;gap:12px}
-  .igGrid iframe{width:100%;border:1px solid var(--pg-line);border-radius:8px;background:#fff}
   .pgEmpty{font-size:12.5px;color:#80868b;font-style:italic}
   .featGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
   .featTile{position:relative;aspect-ratio:1/1;background:#f7f3ea;border-radius:3px;overflow:hidden;
@@ -265,6 +263,10 @@
     width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--ink);
     border-radius:6px;padding:6px;font-size:12px;font-family:inherit;margin-bottom:6px}
   #side textarea{resize:vertical;min-height:52px}
+  .fld{margin-bottom:9px}
+  .fld>label{display:block;font-size:11px;color:var(--ink);margin-bottom:3px;font-weight:500}
+  .fld>.why{font-size:10.5px;color:var(--dim);line-height:1.45;margin-top:-3px;margin-bottom:4px}
+  .fld input,.fld textarea,.fld select{margin-bottom:0!important}
   .subH{font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin:11px 0 5px}
   .miniRow{display:flex;gap:5px}
   .rowItem{display:flex;align-items:center;gap:7px;font-size:11.5px;padding:3px 0;color:var(--dim)}
@@ -356,11 +358,6 @@
         <button type="button" id="btnLinkCal" class="headBtn" hidden>Link Calendar</button></div>
       <div id="pgEvents"></div>
     </div>
-    <div class="pgSec" id="pgInstaSec" hidden>
-      <h2 class="pgH">Latest from Instagram</h2>
-      <div id="pgInsta"></div>
-      <a id="pgInstaLink" class="pgLink" target="_blank" rel="noopener"></a>
-    </div>
     <div class="pgSec" id="pgOrgSec">
       <h2 class="pgH">Organizers</h2>
       <div id="pgOrganizers"></div>
@@ -383,27 +380,21 @@
   <details class="acc" id="accDetails">
     <summary>Project details</summary>
     <div class="accBody">
-      <input type="text" id="prTitle" placeholder="Project title">
-      <input type="text" id="prTagline" placeholder="One-line tagline">
-      <textarea id="prAbout" placeholder="Description shown on the project page"></textarea>
+      <div class="fld"><label>Project name</label><div class="why">Shown in the header, on the map pin and in search results.</div><input type="text" id="prTitle" placeholder="Chimborazo Native Food Project"></div>
+      <div class="fld"><label>Tagline</label><div class="why">One line under the name on the project page.</div><input type="text" id="prTagline" placeholder="A native food forest in Church Hill"></div>
+      <div class="fld"><label>About</label><div class="why">The main text. Visitors see the first few lines and tap “more”.</div><textarea id="prAbout" placeholder="What this project is, who it is for…"></textarea></div>
       <div class="subH">Cover pictures</div>
       <div class="imgs" id="prHero"></div>
+      <div class="why" style="margin:-2px 0 6px">Shown in the carousel at the top. With none, the page borrows pictures from features.</div>
       <button class="small" id="prAddHero">+ Add cover picture</button>
       <input type="file" id="prHeroFile" accept="image/*" style="display:none">
     </div>
   </details>
 
   <details class="acc" id="accLinks">
-    <summary>Links &amp; social</summary>
+    <summary>Links</summary>
     <div class="accBody">
-      <div class="subH">Links</div>
-      <input type="text" id="prWeb" placeholder="Project website URL">
-      <input type="text" id="prDonate" placeholder="Donate URL — used by the Donate button">
-      <div class="subH">Instagram</div>
-      <input type="text" id="prIg" placeholder="@handle">
-      <div id="prIgPosts"></div>
-      <div class="miniRow"><input type="text" id="prIgUrl" placeholder="Paste a post URL to pin"></div>
-      <button class="small" id="prAddIg">+ Pin post</button>
+<div class="fld"><label>Donate link</label><div class="why">Where the Donate button sends people.</div><input type="text" id="prDonate" placeholder="https://…"></div><div class="fld"><label>Website (optional)</label><div class="why">Not shown on the page. Only used for Donate if the donate link above is empty.</div><input type="text" id="prWeb" placeholder="https://…"></div>
     </div>
   </details>
 
@@ -411,11 +402,7 @@
     <summary>Organizers</summary>
     <div class="accBody">
       <div id="prOrgs"></div>
-      <div class="miniRow">
-        <select id="prOrgWho"></select>
-        <input type="text" id="prOrgRole" placeholder="Role">
-      </div>
-      <div class="miniRow"><input type="text" id="prOrgName" placeholder="…or a name, for someone with no account"></div>
+<div class="fld"><label>Add someone with an account</label><div class="why">They keep their own name and photo, on every project.</div><div class="miniRow"><select id="prOrgWho"></select><input type="text" id="prOrgRole" placeholder="Role (optional)"></div></div><div class="fld"><label>…or just a name</label><div class="why">For someone who has not signed in yet.</div><input type="text" id="prOrgName" placeholder="Jane Doe"></div>
       <button class="small" id="prAddOrg">+ Add organizer</button>
     </div>
   </details>
@@ -423,14 +410,10 @@
   <details class="acc" id="accCalendar">
     <summary>Calendar &amp; events</summary>
     <div class="accBody">
-      <div class="subH">Calendar feed</div>
-      <input type="text" id="prIcs" placeholder="Public iCal (.ics) URL — Google, Apple, Outlook…">
-      <input type="text" id="prCalHtml" placeholder="Calendar web page URL (optional)">
-      <div class="hint">In Google Calendar: Settings → your calendar → Integrate calendar → Public address in iCal format.</div>
+<div class="fld"><label>Calendar feed (.ics)</label><div class="why">Events from this feed appear on the page automatically. In Google Calendar: Settings → your calendar → Integrate calendar → <b>Public address in iCal format</b>.</div><input type="text" id="prIcs" placeholder="https://calendar.google.com/calendar/ical/…/public/basic.ics"></div><div class="fld"><label>Calendar page (optional)</label><div class="why">Opened by “Open the calendar in a browser” under Link Calendar.</div><input type="text" id="prCalHtml" placeholder="https://calendar.google.com/calendar/embed?src=…"></div>
       <div class="subH">Events</div>
       <div id="prEvents"></div>
-      <div class="miniRow"><input type="text" id="prEvTitle" placeholder="Event title"></div>
-      <div class="miniRow"><input type="datetime-local" id="prEvWhen"><input type="text" id="prEvPlace" placeholder="Where"></div>
+<div class="fld"><label>Add an event by hand</label><div class="why">For anything not on the calendar feed.</div><input type="text" id="prEvTitle" placeholder="Workday: mulching the new beds"><div class="miniRow" style="margin-top:6px"><input type="datetime-local" id="prEvWhen"><input type="text" id="prEvPlace" placeholder="Where to meet"></div></div>
       <button class="small" id="prAddEv">+ Add event</button>
     </div>
   </details>
@@ -1403,7 +1386,6 @@ function renderPage(){
   closeMenu();
   renderAccount();renderSubscribeBtn();
   renderHero();renderEvents();renderOrganizers();renderStats();
-  renderInstagram();
 }
 function openCalendarLinks(){
   const ics=(PROJECT&&PROJECT.calendar_ics_url||'').trim();
@@ -1422,27 +1404,6 @@ function openCalendarLinks(){
     row.querySelector('button').onclick=closeModal;
     body.appendChild(row);
   });
-}
-function renderInstagram(){
-  const sec=document.getElementById('pgInstaSec'),box=document.getElementById('pgInsta'),
-        link=document.getElementById('pgInstaLink');
-  const handle=(PROJECT&&PROJECT.instagram_handle||'').replace(/^@/,'').trim();
-  const posts=(PROJECT&&Array.isArray(PROJECT.instagram_posts))?PROJECT.instagram_posts:[];
-  sec.hidden=!handle&&!posts.length;
-  box.className='igGrid';box.innerHTML='';
-  for(const url of posts.slice(0,4)){
-    const m=String(url).match(/instagram\.com\/(p|reel)\/([\w-]+)/);
-    if(!m)continue;
-    const f=document.createElement('iframe');
-    f.src=`https://www.instagram.com/${m[1]}/${m[2]}/embed/`;
-    f.height=480;f.loading='lazy';f.title='Instagram post';
-    f.setAttribute('scrolling','no');f.setAttribute('allowtransparency','true');
-    box.appendChild(f);
-  }
-  if(!posts.length)box.innerHTML='<div class="pgEmpty">No posts pinned yet.</div>';
-  link.textContent=handle?'@'+handle+' on Instagram →':'';
-  link.href=handle?'https://www.instagram.com/'+handle+'/':'#';
-  link.hidden=!handle;
 }
 document.getElementById('actSubscribe').onclick=()=>toggleSubscribe();
 document.getElementById('btnLinkCal').onclick=openCalendarLinks;
@@ -1827,17 +1788,9 @@ function renderProjEditor(){
     fig.appendChild(b);hero.appendChild(fig);
   });
   for(const [id,field] of [['prWeb','website_url'],['prDonate','donate_url'],
-      ['prIcs','calendar_ics_url'],['prCalHtml','calendar_html_url'],['prIg','instagram_handle']]){
+      ['prIcs','calendar_ics_url'],['prCalHtml','calendar_html_url']]){
     const el=document.getElementById(id);if(el&&document.activeElement!==el)el.value=PROJECT[field]||'';
   }
-  const igb=document.getElementById('prIgPosts');igb.innerHTML='';
-  (PROJECT.instagram_posts||[]).forEach((u,i)=>{
-    const d=document.createElement('div');d.className='rowItem';
-    d.innerHTML=`<span>${esc(String(u).slice(0,38))}…</span>`;
-    const x=document.createElement('button');x.className='x';x.textContent='x';
-    x.onclick=()=>saveProject({instagram_posts:(PROJECT.instagram_posts||[]).filter((_,j)=>j!==i)});
-    d.appendChild(x);igb.appendChild(d);
-  });
   const who=document.getElementById('prOrgWho');
   const taken=new Set((PROJECT.organizers||[]).map(o=>o.user_id).filter(Boolean));
   who.innerHTML='<option value="">Someone with an account…</option>';
@@ -1889,13 +1842,6 @@ function renderProjEditor(){
 bindProj('prTitle','title');bindProj('prTagline','tagline');bindProj('prAbout','description');
 bindProj('prWeb','website_url');bindProj('prDonate','donate_url');
 bindProj('prIcs','calendar_ics_url');bindProj('prCalHtml','calendar_html_url');
-bindProj('prIg','instagram_handle');
-document.getElementById('prAddIg').onclick=()=>{
-  const u=document.getElementById('prIgUrl');
-  if(!/instagram\.com\/(p|reel)\//.test(u.value))return;
-  saveProject({instagram_posts:[...(PROJECT.instagram_posts||[]),u.value.trim()]});
-  u.value='';renderProjEditor();
-};
 document.getElementById('prAddHero').onclick=()=>document.getElementById('prHeroFile').click();
 document.getElementById('prHeroFile').addEventListener('change',async e=>{
   const f=e.target.files[0];e.target.value='';if(!f)return;
